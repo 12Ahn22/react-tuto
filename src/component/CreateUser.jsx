@@ -1,9 +1,30 @@
-import React from 'react';
+import React, { useCallback, useContext, useRef } from 'react';
+import { UserDispatch } from '../App';
+import useInputs from './useInputs';
 
-const CreateUser = ({ username, email, onChange, onCreate }) => {
-	console.log('Craete User 렌더링중');
-	// console.log('username', username);
-	// console.log('email', email);
+const CreateUser = () => {
+	// app.js가 아닌 여기서 useInputs을 가져와서 사용하기
+	const [{ username, email }, onChange, reset] = useInputs({
+		username: '',
+		email: '',
+	});
+	const idRef = useRef(4);
+	// dispatch 가져오기. state를 변경하는 dispatch이다.
+	const dispatch = useContext(UserDispatch);
+
+	const onCreate = useCallback(() => {
+		dispatch({
+			type: 'CREATE_USER',
+			user: {
+				id: idRef.current,
+				username,
+				email,
+			},
+		});
+		idRef.current += 1;
+		reset();
+	}, [username, email, idRef]);
+
 	return (
 		<div>
 			<input

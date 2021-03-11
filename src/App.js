@@ -1,9 +1,6 @@
-import logo from './logo.svg';
 import './App.css';
-import Hello from './component/Hello';
 import Wrapper from './component/Wrapper';
 import Counter from './component/Counter';
-import Input from './component/input';
 import UserList from './component/userlist';
 import {
 	useRef,
@@ -14,7 +11,6 @@ import {
 	createContext,
 } from 'react';
 import CreateUser from './component/CreateUser';
-import useInputs from './component/useInputs';
 const countActiveUsers = (users) => {
 	console.log('활성 사용자 수를 세는중...');
 	// user중에서 active가 true인 유저로만 배열을 만들고
@@ -27,10 +23,6 @@ export const UserDispatch = createContext(null);
 
 // app.js의 상태를 useState가 아닌 useReducer 사용해보기
 const initialState = {
-	// inputs: {
-	// 	username: '',
-	// 	email: '',
-	// },
 	users: [
 		{
 			id: 1,
@@ -174,58 +166,18 @@ function App() {
 		// const count = useMemo(() => countActiveUsers(users), [users]);
 	}
 
-	const idRef = useRef(4);
 	// useReducer사용하기
 	const [state, dispatch] = useReducer(reducer, initialState);
 	// 쓰기 편하게 비구조화 할당해주기
 	const { users } = state;
 	// const { username, email } = state.inputs;
 
-	const [form, onChange, reset] = useInputs({
-		username: '',
-		email: '',
-	});
-	const { username, email } = form;
-
-	const onCreate = useCallback(() => {
-		dispatch({
-			type: 'CREATE_USER',
-			user: {
-				id: idRef.current,
-				username,
-				email,
-			},
-		});
-		idRef.current += 1;
-		reset();
-	}, [username, email, reset]);
-
-	const onToggle = useCallback((id) => {
-		dispatch({
-			type: 'TOGGLE_USER',
-			id,
-		});
-	}, []);
-
-	const onRemove = useCallback((id) => {
-		dispatch({
-			type: 'REMOVE_USER',
-			id,
-		});
-	}, []);
-
 	const count = useMemo(() => countActiveUsers(users), [users]);
 
 	return (
 		<UserDispatch.Provider value={dispatch}>
 			<Wrapper>
-				<CreateUser
-					Ref={idRef}
-					username={username}
-					email={email}
-					onChange={onChange}
-					onCreate={onCreate}
-				/>
+				<CreateUser />
 				<UserList users={users} />
 				<Counter />
 				<div>활성 사용자 수 : {count} </div>
