@@ -13,11 +13,11 @@ const Counter = () => {
 		// 값을 업데이트 할 수 있습니다.
 
 		// 함수형 업데이트
-		setNumber((prev) => prev + 1);
+		setNumber((prev) => prev + 1, alert('+1을 했습니다.'));
 	};
 	const onDecrese = () => {
 		// setNumber(number - 1);
-		setNumber((prev) => prev - 1);
+		setNumber((prev) => prev - 1, console.log('Did Update'));
 	};
 
 	return (

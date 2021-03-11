@@ -1,36 +1,49 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // 한 파일에 여러 개 컴포넌트 가능
-function User({ user }) {
+function User({ user, onRemove, onToggle }) {
+	useEffect(() => {
+		console.log('user가 마운트되거나 바뀔때마다', user);
+
+		return () => {
+			// 클리너 함수라고 한다.
+			console.log('user값이 바뀌기 전');
+			console.log(user);
+		};
+	}, [user]);
+
 	return (
 		<div>
-			<b>{user.username}</b> <span>({user.email})</span>
+			<b
+				onClick={() => onToggle(user.id)}
+				style={{
+					color: user.active ? 'green' : 'black',
+					cursor: 'pointer',
+				}}
+			>
+				{user.username}
+			</b>{' '}
+			<span>({user.email})</span>
+			{/* onClick=onRemove(id)처럼 쓰면 렌더링 될 때, 실행되버린다.
+				함수를 넣어줘야지 함수를 호출하면 안된다.
+			*/}
+			<button onClick={() => onRemove(user.id)} type="button">
+				삭제
+			</button>
 		</div>
 	);
 }
 
-function UserList() {
-	const users = [
-		{
-			id: 1,
-			username: 'velopert',
-			email: 'public.velopert@gmail.com',
-		},
-		{
-			id: 2,
-			username: 'tester',
-			email: 'tester@example.com',
-		},
-		{
-			id: 3,
-			username: 'liz',
-			email: 'liz@example.com',
-		},
-	];
+function UserList({ users, onRemove, onToggle }) {
 	return (
 		<div>
 			{users.map((user) => (
-				<User user={user} key={user.id} />
+				<User
+					user={user}
+					key={user.id}
+					onRemove={onRemove}
+					onToggle={onToggle}
+				/>
 			))}
 		</div>
 	);
