@@ -5,7 +5,14 @@ import Wrapper from './component/Wrapper';
 import Counter from './component/Counter';
 import Input from './component/input';
 import UserList from './component/userlist';
-import { useRef, useState, useMemo, useCallback, useReducer } from 'react';
+import {
+	useRef,
+	useState,
+	useMemo,
+	useCallback,
+	useReducer,
+	createContext,
+} from 'react';
 import CreateUser from './component/CreateUser';
 import useInputs from './component/useInputs';
 const countActiveUsers = (users) => {
@@ -14,6 +21,9 @@ const countActiveUsers = (users) => {
 	// 그 배열의 길이는 active중인 유저의 수를 나타낸다.
 	return users.filter((user) => user.active).length;
 };
+
+// Context 사용해보기
+export const UserDispatch = createContext(null);
 
 // app.js의 상태를 useState가 아닌 useReducer 사용해보기
 const initialState = {
@@ -177,15 +187,6 @@ function App() {
 	});
 	const { username, email } = form;
 
-	// const onChange = useCallback((e) => {
-	// 	const { name, value } = e.target;
-	// 	dispatch({
-	// 		type: 'CHANGE_INPUT',
-	// 		name,
-	// 		value,
-	// 	});
-	// }, []);
-
 	const onCreate = useCallback(() => {
 		dispatch({
 			type: 'CREATE_USER',
@@ -216,18 +217,20 @@ function App() {
 	const count = useMemo(() => countActiveUsers(users), [users]);
 
 	return (
-		<Wrapper>
-			<CreateUser
-				Ref={idRef}
-				username={username}
-				email={email}
-				onChange={onChange}
-				onCreate={onCreate}
-			/>
-			<UserList users={users} onToggle={onToggle} onRemove={onRemove} />
-			<Counter />
-			<div>활성 사용자 수 : {count} </div>
-		</Wrapper>
+		<UserDispatch.Provider value={dispatch}>
+			<Wrapper>
+				<CreateUser
+					Ref={idRef}
+					username={username}
+					email={email}
+					onChange={onChange}
+					onCreate={onCreate}
+				/>
+				<UserList users={users} />
+				<Counter />
+				<div>활성 사용자 수 : {count} </div>
+			</Wrapper>
+		</UserDispatch.Provider>
 	);
 }
 
