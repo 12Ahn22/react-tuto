@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 const Counter = () => {
+	console.log('couter 렌더링중');
 	// state
 	const [number, setNumber] = useState(0);
 	// useState는 배열을 반환한다
@@ -29,4 +30,5 @@ const Counter = () => {
 	);
 };
 
-export default Counter;
+export default React.memo(Counter);
+// export default Counter;

@@ -16,6 +16,7 @@ const countActiveUsers = (users) => {
 };
 
 function App() {
+	console.log('app 렌더링중~');
 	// user 데이터
 	const [users, setUsers] = useState([
 		{
@@ -43,14 +44,19 @@ function App() {
 		email: '',
 	});
 	const { username, email } = inputs;
-	const onChange = (e) => {
-		// console.log('e 타겟', e.target);
-		const { name, value } = e.target;
-		setInputs({
-			...inputs,
-			[name]: value,
-		});
-	};
+
+	// inputs가 업데이트 되었을 때만, 재선언되고 그렇지 않을 경우는 기존의 것을 사용한다.
+	const onChange = useCallback(
+		(e) => {
+			// console.log('e 타겟', e.target);
+			const { name, value } = e.target;
+			setInputs({
+				...inputs,
+				[name]: value,
+			});
+		},
+		[inputs]
+	);
 
 	const name = 'react';
 	const style = {
@@ -63,7 +69,7 @@ function App() {
 	// useRef를 사용하는 이유 ?
 	// id값이 바뀐다고해서 컴포넌트가 리렌더링 될 필요가없어서
 	const nextId = useRef(4);
-	const onCreate = () => {
+	const onCreate = useCallback(() => {
 		const user = {
 			id: nextId.current,
 			username,
@@ -71,7 +77,7 @@ function App() {
 		};
 		// 배열의 불변성을 지키면서 새로운 배열을 추가하기
 		// 1. 스프레드 연산자 사용하기
-		setUsers([...users, user]);
+		setUsers((users) => [...users, user]);
 		// 2. concat 사용하기
 		// 배열을 합쳐주는 메소드 이다
 		// setUsers(users.concat(user));
@@ -83,15 +89,16 @@ function App() {
 		// console.log(nextId.current); // 4
 
 		nextId.current += 1;
-	};
-	const onRemove = (id) => {
-		setUsers(users.filter((user) => user.id !== id));
-	};
+	}, [email, username]);
 
-	const onToggle = (id) => {
+	const onRemove = useCallback((id) => {
+		setUsers((users) => users.filter((user) => user.id !== id));
+	}, []);
+
+	const onToggle = useCallback((id) => {
 		// map을 사용해서 불변성을 지켜주기
 		// 특정 배열만 수정하기
-		setUsers(
+		setUsers((users) =>
 			users.map((user) =>
 				// map으로 users 배열을 전부 돌면서
 				// 내가 찾는 id가 맞는지 확인하고
@@ -100,7 +107,7 @@ function App() {
 				user.id === id ? { ...user, active: !user.active } : user
 			)
 		);
-	};
+	}, []);
 	//users가 바뀔 때만 리렌더링 되고, 그 외에는 리렌더링되지않고 이전에 값을 사용한다.
 	const count = useMemo(() => countActiveUsers(users), [users]);
 	return (

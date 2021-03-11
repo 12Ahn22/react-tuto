@@ -1,6 +1,7 @@
 import React from 'react';
 
 const CreateUser = ({ username, email, onChange, onCreate }) => {
+	console.log('Craete User 렌더링중');
 	// console.log('username', username);
 	// console.log('email', email);
 	return (
@@ -26,4 +27,5 @@ const CreateUser = ({ username, email, onChange, onCreate }) => {
 	);
 };
 
-export default CreateUser;
+export default React.memo(CreateUser);
+// export default CreateUser;

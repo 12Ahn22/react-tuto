@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 
 // 한 파일에 여러 개 컴포넌트 가능
-function User({ user, onRemove, onToggle }) {
+const User = React.memo(function User({ user, onRemove, onToggle }) {
+	console.log('user 렌더링중~');
 	// useEffect(() => {
 	// 	console.log('user가 마운트되거나 바뀔때마다', user);
 
@@ -32,9 +33,10 @@ function User({ user, onRemove, onToggle }) {
 			</button>
 		</div>
 	);
-}
+});
 
 function UserList({ users, onRemove, onToggle }) {
+	console.log('userList 렌더링중~');
 	return (
 		<div>
 			{users.map((user) => (
@@ -49,4 +51,4 @@ function UserList({ users, onRemove, onToggle }) {
 	);
 }
 
-export default UserList;
+export default React.memo(UserList, (prev, next) => next.users === prev.users);
