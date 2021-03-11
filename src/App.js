@@ -7,7 +7,7 @@ import Input from './component/input';
 import UserList from './component/userlist';
 import { useRef, useState, useMemo, useCallback, useReducer } from 'react';
 import CreateUser from './component/CreateUser';
-
+import useInputs from './component/useInputs';
 const countActiveUsers = (users) => {
 	console.log('활성 사용자 수를 세는중...');
 	// user중에서 active가 true인 유저로만 배열을 만들고
@@ -17,10 +17,10 @@ const countActiveUsers = (users) => {
 
 // app.js의 상태를 useState가 아닌 useReducer 사용해보기
 const initialState = {
-	inputs: {
-		username: '',
-		email: '',
-	},
+	// inputs: {
+	// 	username: '',
+	// 	email: '',
+	// },
 	users: [
 		{
 			id: 1,
@@ -45,14 +45,14 @@ const initialState = {
 // 리듀서 함수
 function reducer(state, action) {
 	switch (action.type) {
-		case 'CHANGE_INPUT':
-			return {
-				...state,
-				inputs: {
-					...state.inputs,
-					[action.name]: action.value,
-				},
-			};
+		// case 'CHANGE_INPUT':
+		// 	return {
+		// 		...state,
+		// 		inputs: {
+		// 			...state.inputs,
+		// 			[action.name]: action.value,
+		// 		},
+		// 	};
 		case 'CREATE_USER':
 			return {
 				inputs: initialState.inputs,
@@ -169,16 +169,22 @@ function App() {
 	const [state, dispatch] = useReducer(reducer, initialState);
 	// 쓰기 편하게 비구조화 할당해주기
 	const { users } = state;
-	const { username, email } = state.inputs;
+	// const { username, email } = state.inputs;
 
-	const onChange = useCallback((e) => {
-		const { name, value } = e.target;
-		dispatch({
-			type: 'CHANGE_INPUT',
-			name,
-			value,
-		});
-	}, []);
+	const [form, onChange, reset] = useInputs({
+		username: '',
+		email: '',
+	});
+	const { username, email } = form;
+
+	// const onChange = useCallback((e) => {
+	// 	const { name, value } = e.target;
+	// 	dispatch({
+	// 		type: 'CHANGE_INPUT',
+	// 		name,
+	// 		value,
+	// 	});
+	// }, []);
 
 	const onCreate = useCallback(() => {
 		dispatch({
@@ -190,7 +196,8 @@ function App() {
 			},
 		});
 		idRef.current += 1;
-	}, [username, email]);
+		reset();
+	}, [username, email, reset]);
 
 	const onToggle = useCallback((id) => {
 		dispatch({
