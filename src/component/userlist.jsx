@@ -2,15 +2,15 @@ import React, { useEffect } from 'react';
 
 // 한 파일에 여러 개 컴포넌트 가능
 function User({ user, onRemove, onToggle }) {
-	useEffect(() => {
-		console.log('user가 마운트되거나 바뀔때마다', user);
+	// useEffect(() => {
+	// 	console.log('user가 마운트되거나 바뀔때마다', user);
 
-		return () => {
-			// 클리너 함수라고 한다.
-			console.log('user값이 바뀌기 전');
-			console.log(user);
-		};
-	}, [user]);
+	// 	return () => {
+	// 		// 클리너 함수라고 한다.
+	// 		console.log('user값이 바뀌기 전');
+	// 		console.log(user);
+	// 	};
+	// }, [user]);
 
 	return (
 		<div>

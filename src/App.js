@@ -5,8 +5,15 @@ import Wrapper from './component/Wrapper';
 import Counter from './component/Counter';
 import Input from './component/input';
 import UserList from './component/userlist';
-import { useRef, useState } from 'react';
+import { useRef, useState, useMemo, useCallback } from 'react';
 import CreateUser from './component/CreateUser';
+
+const countActiveUsers = (users) => {
+	console.log('활성 사용자 수를 세는중...');
+	// user중에서 active가 true인 유저로만 배열을 만들고
+	// 그 배열의 길이는 active중인 유저의 수를 나타낸다.
+	return users.filter((user) => user.active).length;
+};
 
 function App() {
 	// user 데이터
@@ -94,7 +101,8 @@ function App() {
 			)
 		);
 	};
-
+	//users가 바뀔 때만 리렌더링 되고, 그 외에는 리렌더링되지않고 이전에 값을 사용한다.
+	const count = useMemo(() => countActiveUsers(users), [users]);
 	return (
 		<Wrapper>
 			<CreateUser
@@ -105,6 +113,7 @@ function App() {
 			/>
 			<UserList users={users} onRemove={onRemove} onToggle={onToggle} />
 			<Counter />
+			<div>활성 사용자 수 : {count}</div>
 		</Wrapper>
 	);
 }
