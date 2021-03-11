@@ -12,6 +12,7 @@ const CreateUser = ({ username, email, onChange, onCreate }) => {
 				name="username"
 				onChange={onChange}
 				value={username}
+				// value="아이디고정"
 			/>
 			<input
 				type="text"
