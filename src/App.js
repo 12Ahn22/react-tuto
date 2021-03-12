@@ -2,6 +2,7 @@ import './App.css';
 import produce from 'immer';
 import Wrapper from './component/Wrapper';
 import Counter from './component/Counter';
+import ClassCounter from './component/ClassCounter';
 import UserList from './component/userlist';
 import {
 	useRef,
@@ -12,6 +13,7 @@ import {
 	createContext,
 } from 'react';
 import CreateUser from './component/CreateUser';
+import Hello from './component/Hello';
 const countActiveUsers = (users) => {
 	console.log('활성 사용자 수를 세는중...');
 	// user중에서 active가 true인 유저로만 배열을 만들고
@@ -195,6 +197,8 @@ function App() {
 				<UserList users={users} />
 				<Counter />
 				<div>활성 사용자 수 : {count} </div>
+				<Hello color="red" isTrue />
+				<ClassCounter />
 			</Wrapper>
 		</UserDispatch.Provider>
 	);
