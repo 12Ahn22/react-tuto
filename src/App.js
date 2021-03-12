@@ -1,4 +1,5 @@
 import './App.css';
+import produce from 'immer';
 import Wrapper from './component/Wrapper';
 import Counter from './component/Counter';
 import UserList from './component/userlist';
@@ -17,6 +18,7 @@ const countActiveUsers = (users) => {
 	// 그 배열의 길이는 active중인 유저의 수를 나타낸다.
 	return users.filter((user) => user.active).length;
 };
+// window.produce = produce; // 브라우저에서 사용하기 위해서
 
 // Context 사용해보기
 export const UserDispatch = createContext(null);
@@ -56,23 +58,35 @@ function reducer(state, action) {
 		// 		},
 		// 	};
 		case 'CREATE_USER':
-			return {
-				inputs: initialState.inputs,
-				users: state.users.concat(action.user),
-			};
+			// return {
+			// 	inputs: initialState.inputs,
+			// 	users: state.users.concat(action.user),
+			// };
+			// immer 써보기
+			return produce(state, (draft) => {
+				draft.users.push(action.user);
+			});
 		case 'TOGGLE_USER':
-			return {
-				...state,
-				users: state.users //
-					.map((user) =>
-						user.id === action.id ? { ...user, active: !user.active } : user
-					),
-			};
+			// return {
+			// 	...state,
+			// 	users: state.users //
+			// 		.map((user) =>
+			// 			user.id === action.id ? { ...user, active: !user.active } : user
+			// 		),
+			// };
+			return produce(state, (draft) => {
+				const user = draft.users.find((user) => user.id === action.id);
+				user.active = !user.active;
+			});
 		case 'REMOVE_USER':
-			return {
-				...state,
-				users: state.users.filter((user) => user.id !== action.id),
-			};
+			// return {
+			// 	...state,
+			// 	users: state.users.filter((user) => user.id !== action.id),
+			// };
+			return produce(state, (draft) => {
+				const index = draft.users.findIndex((user) => user.id === action.id);
+				draft.users.splice(index, 1);
+			});
 		default:
 			throw new Error('Error');
 	}
