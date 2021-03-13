@@ -14,6 +14,8 @@ import {
 } from 'react';
 import CreateUser from './component/CreateUser';
 import Hello from './component/Hello';
+import Time from './component/Time';
+import Select from './component/Select';
 const countActiveUsers = (users) => {
   console.log('활성 사용자 수를 세는중...');
   // user중에서 active가 true인 유저로만 배열을 만들고
@@ -199,6 +201,8 @@ function App() {
         <div>활성 사용자 수 : {count} </div>
         <Hello color="red" isTrue />
         <ClassCounter />
+        <Time />
+        <Select />
       </Wrapper>
     </UserDispatch.Provider>
   );
