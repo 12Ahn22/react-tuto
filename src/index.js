@@ -3,10 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Calculator from './component/Calculator';
+import CalculatorDiv from './component/CalculatorDiv';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <CalculatorDiv />
   </React.StrictMode>,
   document.getElementById('root')
 );

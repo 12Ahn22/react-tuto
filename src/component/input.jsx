@@ -49,13 +49,7 @@ const Input = () => {
         onChange={onChange}
         value={nickname}
       />
-      <textarea
-        name="comment"
-        id="commnet"
-        cols="30"
-        rows="10"
-        value="comment"
-      ></textarea>
+
       <button type="button" onClick={onReset}>
         초기화
       </button>
