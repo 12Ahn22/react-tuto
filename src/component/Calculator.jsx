@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import BoilingVerdict from './BoilingVerdict';
 
 const Calculator = ({
@@ -27,7 +27,7 @@ const Calculator = ({
         onChange={handleChanged}
         placeholder="temperature"
       />
-      <BoilingVerdict celsius={temperature} />
+      <BoilingVerdict temperature={temperature} scale={scale} />
     </fieldset>
   );
 };
