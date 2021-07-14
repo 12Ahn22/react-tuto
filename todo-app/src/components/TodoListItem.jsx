@@ -7,15 +7,30 @@ import {
 } from 'react-icons/md';
 
 import './TodoListItem.scss';
+// classnames
+import cn from 'classnames';
 
-const TodoListItem = () => {
+const TodoListItem = ({ todo, id, onRemove, onToggle }) => {
+  // 비구조화할당
+  const { text, checked } = todo;
   return (
     <div className="TodoListItem">
-      <div className="checkbox">
-        <MdCheckBoxOutlineBlank />
-        <div className="text">할 일</div>
+      <div
+        onClick={() => {
+          onToggle(id);
+        }}
+        className={cn('checkbox', { checked })}
+      >
+        {checked ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}
+
+        <div className="text">{text}</div>
       </div>
-      <div className="remove">
+      <div
+        className="remove"
+        onClick={() => {
+          onRemove(id);
+        }}
+      >
         <MdRemoveCircleOutline />
       </div>
     </div>
