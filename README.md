@@ -7,9 +7,9 @@
 - [리액트를 다루는 기술](https://github.com/velopert/learning-react)
 - [Velopert 리액트 깃 북](https://react.vlpt.us/)
 
-### todo-app
+### 🔮 todo-app
 
-일정 관리 REACT 어플리케이션입니다.
+> 일정 관리 REACT 어플리케이션입니다.
 
 #### 사용 라이브러리
 
@@ -44,9 +44,9 @@ obj == obj2; // false
 
 <br/>
 
-### vanilla-redux
+### 🔮 vanilla-redux
 
-바닐라 스크립트에 리덕스를 사용한 어플리케이션 입니다.
+> 바닐라 스크립트에 리덕스를 사용한 어플리케이션 입니다.
 
 #### 사용 라이브러리
 
@@ -69,15 +69,62 @@ obj == obj2; // false
 7. 액션 발생시키기
    <br/>
 
-### react-redux-tuto
+### 🔮 react-redux-tuto
 
-리덕스를 리액트에 적용해보기
+> 리덕스를 리액트에 적용해보기
+> 다양한 리덕스 라이브러리들 사용해보기
 
 #### 사용 라이브러리
 
 - redux
-- react-redux
+- [react-redux](https://react-redux.js.org/)
+- [redux-actions](https://github.com/redux-utilities/redux-actions)
+- [redux-thunk](https://github.com/reduxjs/redux-thunk)
 
 #### 리뷰
 
 리액트에서는 store의 내장 함수 subscribe보다는 react-redux 라이브러리를 사용한다.
+리덕스 액션을 통해 액션 객체 생성 함수를 간단한 코드로 작성할 수 있다.
+리덕스 미들웨어는 액션과 리듀서 사이의 중간역할을 한다.
+
+#### 미들웨어의 기본 구조
+
+```js
+const 미들웨어 = (store) => (next) => (action) => {
+  // 미들웨어
+};
+```
+
+노드 express의 미들웨어와 유사하다. 내부에 next(action)을 사용해야 다음 미들웨어, 리듀서로 흐름이 이동할 수 있다.
+
+#### redux-thunk
+
+비동기 작업을 위한 리덕스 미들웨어
+객체가 아닌 **함수 형태의 액션**을 디스패치 할 수 있게 한다.
+
+### 🔮 splitting-sample
+
+> 간단한 코드 스플리팅 해보기
+
+#### 코드 스플리팅이란?
+
+하나의 큰 번들을 여러개의 작은 번들들로 쪼개주는 작업
+코드 스플리팅을 통해 필요할 때, 필요한 번들만 로드함으로써 초기 로딩시간을 줄여주고, 현재 필요하지 않은 코드는 로드하지 않음으로써 어플리케이션의 성능을 크게 향상 시킬수 있다.
+
+#### 리뷰
+
+코드 스플리팅이 무엇인지 알아보기
+<br/>
+
+### 🔮 blog
+
+> 책 예제를 참고해 만든 블로그 웹 사이트
+> 책에서는 koa를 사용하지만 express를 이용해 백엔드를 구축
+
+#### 사용라이브러리
+
+- dotenv
+
+**백엔드**
+
+- express

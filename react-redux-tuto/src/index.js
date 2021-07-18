@@ -8,12 +8,20 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 
 // 스토어 만들기
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './modules';
+
+// 미들웨어 적용하기
+import loggerMiddleware from './lib/loggerMiddleware';
+
+// 리덕스 thunk 사용해보기
+import ReduxThunk from 'redux-thunk';
 
 const store = createStore(
   rootReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  // log를 찍는 미들웨어와 리덕스 thunk 미들웨어 사용하기
+  applyMiddleware(loggerMiddleware, ReduxThunk) // 미들웨어 적용하기
+  // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 ReactDOM.render(

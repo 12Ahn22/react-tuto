@@ -1,18 +1,39 @@
 // 실제로 리덕스 스토어에 접근하여
 // 원하는 상태를 가져오고 액션을 디스패치 하는 컴포넌트들
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import Counter from '../components/Counter';
-import { connect } from 'react-redux';
+// 훅스로 연결하기
+import { connect, useSelector, useDispatch } from 'react-redux';
+
 // 액션 생성함수가 너무 많아서 코드가 더러워질 때 사용한다
 import { bindActionCreators } from 'redux';
 // 액션 객체 생성 함수 불러오기
 import { increase, decrease } from '../modules/counter';
+// 비동기 액션 객체 생성 함수 불러오기
+import { increaseAsync, decreaseAsync } from '../modules/counter';
 
-const CounterContainer = ({ number, increase, decrease }) => {
+// const CounterContainer = ({ number, increase, decrease }) => {
+// return (
+//   // Store에서 가져온 상태들을 props로 보내주기
+//   <Counter number={number} onIncrease={increase} onDecrease={decrease} />
+// );
+// };
+
+const CounterContainer = ({ increaseAsync, decreaseAsync }) => {
+  const number = useSelector((state) => state.counter.number);
+  const dispatch = useDispatch();
+  // useCallback()으로 이벤터 처리기 함수가 계속
+  // 재 생성되지않도록 하기
+  const onIncrease = useCallback(() => dispatch(increase()), [dispatch]);
+  const onDecrease = useCallback(() => dispatch(decrease()), [dispatch]);
   return (
     // Store에서 가져온 상태들을 props로 보내주기
-    <Counter number={number} onIncrease={increase} onDecrease={decrease} />
+    <Counter
+      number={number}
+      onIncrease={increaseAsync}
+      onDecrease={decreaseAsync}
+    />
   );
 };
 
@@ -69,7 +90,9 @@ export default connect(
   // 아예 파라미터를 객체로 전달하면
   // connect가 알아서 bindActionCreator를 해준다.
   {
-    increase,
-    decrease,
+    increaseAsync,
+    decreaseAsync,
   }
 )(CounterContainer);
+
+// export default CounterContainer;
