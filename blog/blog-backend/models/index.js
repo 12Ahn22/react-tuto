@@ -27,6 +27,7 @@ db.Sequelize = Sequelize;
 // 만든 테이블을 db에 연결하기
 db.Post = require('./post')(sequelize, Sequelize);
 db.Hashtag = require('./hashtag')(sequelize, Sequelize);
+db.User = require('./user')(sequelize, Sequelize);
 
 // 모듈 내보내기
 module.exports = db;

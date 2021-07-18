@@ -18,18 +18,6 @@ app.use(express.urlencoded({ extended: false })); // url 해석 기능 추가
 app.use(express.json()); // json 해석 기능 추가
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 미들웨어
-app.use((req, res, next) => {
-  console.log(req.url);
-  console.log(1);
-  next();
-});
-
-app.use((req, res, next) => {
-  console.log(2);
-  next();
-});
-
 // 데이터베이스 연결하기
 sequelize
   .sync({ force: false }) // true라면 매번 새 테이블 생성
@@ -43,9 +31,11 @@ sequelize
 
 // 라우터 참조
 const postRouter = require('./routers/API/posts/posts');
+const authRouter = require('./routers/API/auth/auth');
 
 // 라우터들
 app.use('/api/posts', postRouter); // posts 라우터
+app.use('/api/auth', authRouter); // auth 라우터
 
 // 기본 라우터
 app.get('/', (req, res) => {

@@ -132,3 +132,5 @@ const 미들웨어 = (store) => (next) => (action) => {
 - sequelize
 - sequelize-cli
 - mysql
+- bcrypt
+- jsonwebtoken
