@@ -17,6 +17,7 @@ const checkParamId = async (req, res, next) => {
   const isData = await Post.findOne({
     where: {
       id,
+      uid: req.user.userId,
     },
   });
   // id에 맞는 데이터가 없다면
@@ -27,7 +28,7 @@ const checkParamId = async (req, res, next) => {
       data: [],
       msg: '해당하는 id의 포스터가 존재하지 않습니다.',
     };
-    res.json(result);
+    return res.json(result);
   }
   // 있는 경우 계속 진행
   next();
@@ -58,14 +59,26 @@ router.get('/', async (req, res) => {
   // 쿼리스트링은 req.query.이름 에 담겨있다.
   const page = parseInt(req.query.page || '1', 10);
 
+  // 유저 이름으로 검색&태그 검색 기능
+  const { uid, tag } = req.query;
+  // localhost:4005/posts?page=2&username=&tag=
+  const query = {
+    ...(uid ? { uid: uid } : {}),
+    // ...(tag ? { tags: tag } : {}), // tag가 여러개면 배열로
+  };
+
+  console.log('쿼리 뭐들어가는지 테스트', query);
+
   // 데이터베이스에서 post 데이터 가져오기
   try {
     const postList = await Post.findAll({
+      where: query,
       offset: (page - 1) * 10, // 시작부터 제외시킬 개수
       limit: 10, // limit 옵션을 사용해, 가져올 데이터량 결정 가능
       order: [['id', 'DESC']], // 큰 수, 오래된 순서로 가져오기 DESC
     });
 
+    console.log('태그를 어떻게 가져오지', postList[0].tags);
     // 찾아온 데이터가 너무 길기 때문에 내용을 200자 아래로 줄여준다.
     // 상세 클릭 시, 모든 글을 볼 수 있게 한다.
     // findAll로 찾아온 데이터의 값은 postList[idx].컬럼명
@@ -104,9 +117,11 @@ router.get('/', async (req, res) => {
 });
 
 // post를 작성하는 라우터
-router.post('/', checkLoggedIn, async (req, res) => {
+router.post('/', async (req, res) => {
   // 비구조화 할당 - 저장할 데이터
-  const { title, body, tags, uid } = req.body; // req.body.속성명
+  const { title, body, tags } = req.body; // req.body.속성명
+
+  // console.log('=======user=====가 있냐', req.user);
 
   // 실제 DB와 연결하기
   try {
@@ -115,7 +130,7 @@ router.post('/', checkLoggedIn, async (req, res) => {
       title,
       body,
       tags,
-      uid,
+      uid: req.user.userId,
     });
 
     const result = {
@@ -140,14 +155,16 @@ router.post('/', checkLoggedIn, async (req, res) => {
 });
 
 // 특정 포스트 조회 라우터
-router.get('/:id', checkParamId, async (req, res) => {
+router.get('/:id', async (req, res) => {
   // 파라미터에서 /:id의 값을 가져온다
-  const id = Number(req.params.id); // req.params.id 는 string
+  const idx = req.params.id; // req.params.id 는 string
+
+  // console.log('======id=========', id);
 
   // DB에서 해당 id에 맞는 post를 검색해서 가져온다
   try {
     const findData = await Post.findOne({
-      where: { id },
+      where: { id: 3 },
     });
     if (findData) {
       const result = {
@@ -155,17 +172,17 @@ router.get('/:id', checkParamId, async (req, res) => {
         data: findData,
         msg: '단일 포스터 조회 성공',
       };
-      res.json(result);
+      return res.json(result);
     }
     // 미들웨어의 사용으로 아래와 같은 검증을 할 필요없다
-    // else {
-    //   const result = {
-    //     status: 400,
-    //     data: [],
-    //     msg: '해당하는 포스터가 존재하지 않습니다',
-    //   };
-    //   res.json(result);
-    // }
+    else {
+      const result = {
+        status: 400,
+        data: [],
+        msg: '해당하는 포스터가 존재하지 않습니다',
+      };
+      res.json(result);
+    }
     // 실패 시,
   } catch (error) {
     console.log(error);
@@ -174,7 +191,7 @@ router.get('/:id', checkParamId, async (req, res) => {
       data: error,
       msg: '단일 포스터 조회 실패',
     };
-    res.json(result);
+    return res.json(result);
   }
 });
 
