@@ -120,6 +120,7 @@ const 미들웨어 = (store) => (next) => (action) => {
 
 > 책 예제를 참고해 만든 블로그 웹 사이트
 > 책에서는 koa를 사용하지만 express를 이용해 백엔드를 구축
+> mongoDB가 아닌 MySQL를 데이터베이스로 사용 + sequelize
 
 #### 사용라이브러리
 
@@ -128,3 +129,6 @@ const 미들웨어 = (store) => (next) => (action) => {
 **백엔드**
 
 - express
+- sequelize
+- sequelize-cli
+- mysql

@@ -4,5 +4,11 @@
   "main": "index.js",
   "repository": "https://github.com/12Ahn22/react-tuto.git",
   "author": "ayo <12ayo22@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "global": "^4.4.0",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.6.5",
+    "sequelize-cli": "^6.2.0"
+  }
 }

@@ -36,6 +36,10 @@ module.exports = (sequelize, DataTypes) => {
             .filter((item) => item !== ''); // 빈 값은 삭제
         },
       },
+      uid: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+      },
     },
     {
       // Other model options go here
