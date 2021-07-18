@@ -5,6 +5,31 @@ const router = express.Router();
 // DB 불러오기
 const Post = require('../../../models/index').Post;
 
+// /:id를 사용하는 라우터들이 올바른 param를 사용하는지
+// 해당 id값의 포스터가 있는지 검증하는 미들웨어
+const checkParamId = async (req, res, next) => {
+  const id = req.params.id;
+  console.log('===저는 미들웨어의 id 입니다====', id);
+  // 해당 id값이 db에 존재하는지 검색
+  const isData = await Post.findOne({
+    where: {
+      id,
+    },
+  });
+  // id에 맞는 데이터가 없다면
+  if (isData === null) {
+    // findOne은 데이터를 찾지 못하면 null을 반환한다.
+    const result = {
+      status: 200,
+      data: [],
+      msg: '해당하는 id의 포스터가 존재하지 않습니다.',
+    };
+    res.json(result);
+  }
+  // 있는 경우 계속 진행
+  next();
+};
+
 // localhost:4005/posts
 // 모든 posts를 가져오는 라우터
 router.get('/', async (req, res) => {
@@ -72,7 +97,7 @@ router.post('/', async (req, res) => {
 });
 
 // 특정 포스트 조회 라우터
-router.get('/:id', async (req, res) => {
+router.get('/:id', checkParamId, async (req, res) => {
   // 파라미터에서 /:id의 값을 가져온다
   const id = Number(req.params.id); // req.params.id 는 string
 
@@ -88,14 +113,16 @@ router.get('/:id', async (req, res) => {
         msg: '단일 포스터 조회 성공',
       };
       res.json(result);
-    } else {
-      const result = {
-        status: 400,
-        data: [],
-        msg: '해당하는 포스터가 존재하지 않습니다',
-      };
-      res.json(result);
     }
+    // 미들웨어의 사용으로 아래와 같은 검증을 할 필요없다
+    // else {
+    //   const result = {
+    //     status: 400,
+    //     data: [],
+    //     msg: '해당하는 포스터가 존재하지 않습니다',
+    //   };
+    //   res.json(result);
+    // }
     // 실패 시,
   } catch (error) {
     console.log(error);
@@ -109,7 +136,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // 특정 포스트 삭제하기
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', checkParamId, async (req, res) => {
   // 파라미터에서 /:id의 값을 가져온다
   const id = Number(req.params.id); // req.params.id 는 string
 
@@ -123,13 +150,6 @@ router.delete('/:id', async (req, res) => {
         status: 200,
         data: removedData,
         msg: '단일 포스터 삭제 성공',
-      };
-      res.json(result);
-    } else {
-      const result = {
-        status: 400,
-        data: [],
-        msg: '해당하는 포스터가 존재하지 않습니다',
       };
       res.json(result);
     }
@@ -147,7 +167,7 @@ router.delete('/:id', async (req, res) => {
 
 // 포스트를 수정하는 라우터
 // PUT은 데이터를 통째로 교체할 때 사용한다.
-router.put('/:id', async (req, res) => {
+router.put('/:id', checkParamId, async (req, res) => {
   // 파라미터에서 /:id의 값을 가져온다
   const id = Number(req.params.id); // req.params.id 는 string
 
@@ -171,13 +191,6 @@ router.put('/:id', async (req, res) => {
         status: 200,
         data: updatedData,
         msg: '단일 포스터 수정 성공',
-      };
-      res.json(result);
-    } else {
-      const result = {
-        status: 400,
-        data: [],
-        msg: '해당하는 포스터가 존재하지 않습니다',
       };
       res.json(result);
     }
