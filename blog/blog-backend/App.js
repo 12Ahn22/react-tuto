@@ -45,7 +45,7 @@ sequelize
 const postRouter = require('./routers/API/posts/posts');
 
 // 라우터들
-app.use('/posts', postRouter); // posts 라우터
+app.use('/api/posts', postRouter); // posts 라우터
 
 // 기본 라우터
 app.get('/', (req, res) => {

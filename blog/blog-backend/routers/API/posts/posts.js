@@ -33,17 +33,53 @@ const checkParamId = async (req, res, next) => {
 // localhost:4005/posts
 // 모든 posts를 가져오는 라우터
 router.get('/', async (req, res) => {
+  /* 
+    마지막 페이지 계산을 위해서 총 데이터를 10개씩 잘라서 보여줄 때,
+    몇 페이지가 나오는지 계산하기
+  */
+  // .count()로 row의 개수를 구할 수 있다.
+  const postCount = await Post.count();
+  // 계산한 마지막 페이지 값을 HTTP 헤더에 넣어준다.
+  // res.set을 통해 커스텀 HTTP 헤더 설정해주기
+  res.set('Last-Page', Math.ceil(postCount / 10));
+
+  /* 
+      페이지 네이션 구현하기!
+  */
+  // 페이지 수를 받아온다. 대체로 쿼리스트링으로 가져온다
+  // localhost:4005/posts?page=2
+  // 쿼리 스트링 값을 받아오는 방법
+  // 쿼리스트링은 req.query.이름 에 담겨있다.
+  const page = parseInt(req.query.page || '1', 10);
+
   // 데이터베이스에서 post 데이터 가져오기
   try {
     const postList = await Post.findAll({
-      // offset: 1, // 시작부터 제외시킬 개수
-      limit: 2, // limit 옵션을 사용해, 가져올 데이터량 결정 가능
+      offset: (page - 1) * 10, // 시작부터 제외시킬 개수
+      limit: 10, // limit 옵션을 사용해, 가져올 데이터량 결정 가능
+      order: [['id', 'DESC']], // 큰 수, 오래된 순서로 가져오기 DESC
     });
+
+    // 찾아온 데이터가 너무 길기 때문에 내용을 200자 아래로 줄여준다.
+    // 상세 클릭 시, 모든 글을 볼 수 있게 한다.
+    // findAll로 찾아온 데이터의 값은 postList[idx].컬럼명
+    // console.log('가져온 데이터의 타입은 무엇인가요?', postList[0].tags); // obj
+    // postList의 모든 요소들의 body 속성을 200자 아래로 줄여준다.
+    // console.log('body테스트', postList[0].body[2]);
+
+    const shortenPostList = postList.map((post) => ({
+      title: post.title,
+      uid: post.uid,
+      tags: post.tags,
+      createdAt: post.createdAt,
+      body:
+        post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`,
+    }));
 
     // posts 데이터를 보낸다
     const result = {
       status: 200,
-      data: postList,
+      data: shortenPostList,
       msg: '포스트 전체 조회 성공',
     };
     res.json(result);
