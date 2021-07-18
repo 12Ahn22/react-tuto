@@ -6,7 +6,10 @@ dotenv.config();
 const path = require('path');
 // 데이터베이스 참조
 const { sequelize } = require('./models/index');
-
+// 토큰 인증 미들웨어
+const jwtMiddleWare = require('./routers/jwtMiddleware');
+// 쿠키 파서
+const cookieParser = require('cookie-parser');
 // 변수
 const port = process.env.PORT || 4005;
 
@@ -17,6 +20,11 @@ const app = express();
 app.use(express.urlencoded({ extended: false })); // url 해석 기능 추가
 app.use(express.json()); // json 해석 기능 추가
 app.use(express.static(path.join(__dirname, 'public')));
+// 쿠키 파서
+app.use(cookieParser()); // 쿠키를 사용하려면 꼭 쿠키 파서 미들웨어를 사용하자.
+
+// 인증 미들웨어는 라우터보다 먼저 사용하기
+app.use(jwtMiddleWare);
 
 // 데이터베이스 연결하기
 sequelize
@@ -40,6 +48,13 @@ app.use('/api/auth', authRouter); // auth 라우터
 // 기본 라우터
 app.get('/', (req, res) => {
   res.send('Hello');
+});
+
+// 에러 처리 라우터
+app.use((err, req, res, next) => {
+  console.error(err);
+  err.status = 500;
+  res.render('에러 처리 라우터입니다.', err);
 });
 
 app.listen(port, () => {

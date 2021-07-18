@@ -5,6 +5,9 @@ const router = express.Router();
 // DB 불러오기
 const Post = require('../../../models/index').Post;
 
+// 로그인 여부를 따지는 미들웨어
+const checkLoggedIn = require('../../checkLoggedIn');
+
 // /:id를 사용하는 라우터들이 올바른 param를 사용하는지
 // 해당 id값의 포스터가 있는지 검증하는 미들웨어
 const checkParamId = async (req, res, next) => {
@@ -33,6 +36,9 @@ const checkParamId = async (req, res, next) => {
 // localhost:4005/posts
 // 모든 posts를 가져오는 라우터
 router.get('/', async (req, res) => {
+  // jwt 인증 미들웨어에서 유저 정보가 넘어오나요?
+  // console.log('============유저정보===========', req.user); // 넘어온다
+
   /* 
     마지막 페이지 계산을 위해서 총 데이터를 10개씩 잘라서 보여줄 때,
     몇 페이지가 나오는지 계산하기
@@ -68,6 +74,7 @@ router.get('/', async (req, res) => {
     // console.log('body테스트', postList[0].body[2]);
 
     const shortenPostList = postList.map((post) => ({
+      id: post.id,
       title: post.title,
       uid: post.uid,
       tags: post.tags,
@@ -97,7 +104,7 @@ router.get('/', async (req, res) => {
 });
 
 // post를 작성하는 라우터
-router.post('/', async (req, res) => {
+router.post('/', checkLoggedIn, async (req, res) => {
   // 비구조화 할당 - 저장할 데이터
   const { title, body, tags, uid } = req.body; // req.body.속성명
 
@@ -172,7 +179,7 @@ router.get('/:id', checkParamId, async (req, res) => {
 });
 
 // 특정 포스트 삭제하기
-router.delete('/:id', checkParamId, async (req, res) => {
+router.delete('/:id', checkLoggedIn, checkParamId, async (req, res) => {
   // 파라미터에서 /:id의 값을 가져온다
   const id = Number(req.params.id); // req.params.id 는 string
 
@@ -203,7 +210,7 @@ router.delete('/:id', checkParamId, async (req, res) => {
 
 // 포스트를 수정하는 라우터
 // PUT은 데이터를 통째로 교체할 때 사용한다.
-router.put('/:id', checkParamId, async (req, res) => {
+router.put('/:id', checkLoggedIn, checkParamId, async (req, res) => {
   // 파라미터에서 /:id의 값을 가져온다
   const id = Number(req.params.id); // req.params.id 는 string
 

@@ -5,6 +5,11 @@ const router = express.Router();
 const { User } = require('../../../models/index');
 // 비밀번호 암호화를 위한 bcrypt
 const bcrypt = require('bcrypt');
+// 로그인 인증을 위한 토큰 발급
+const jwt = require('jsonwebtoken');
+
+// 인증 미들웨어
+const jwtMiddleWare = require('../../jwtMiddleware');
 
 // 회원 가입 라우터
 router.post('/regist', async (req, res) => {
@@ -95,6 +100,26 @@ router.post('/login', async (req, res) => {
     }
 
     // 로그인 성공 시, 토큰을 발급해준다.
+    // jwt.sign(토큰에 넣고싶은 데이터, JWT시크릿 키, 옵션들)
+    const token = jwt.sign(
+      {
+        username,
+        id: user.id,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '3d', // 만료 기간
+        issuer: 'ayo', // 발행자
+      }
+    );
+    // 해당 토큰을 클라이언트 측에서 저장해야한다
+    // [저장방법]
+    // 로컬스토리지,세션스토리지 / 브라우저의 쿠키
+    // 쿠키에 저장하도록 하자 - Header에 Set-Cookie에서 찾을 수 있다.
+    res.cookie('access_token', token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7일- 밀리초
+    });
 
     res.json({
       status: 200,
@@ -112,8 +137,34 @@ router.post('/login', async (req, res) => {
 });
 
 // 로그인 상태 확인 라우터
-router.get('/check', (req, res) => {});
+router.get('/check', (req, res) => {
+  // 토큰이 만료되기 전에 재발급 해주는 기능
+  // 로그인 중인지 확인하는 방법. req.user에 데이터가 있으면 로그인 중
+  const user = req.user;
+  if (!user) {
+    // user가 없으면 로그인 중이 아니다.
+    return res.json({
+      status: 401,
+      data: [],
+      msg: '로그인을 해주세요',
+    });
+  }
+  res.json({
+    status: 200,
+    data: user,
+    msg: '로그인 중 입니다',
+  });
+});
+
 // 로그아웃 라우터
-router.post('/logout', (req, res) => {});
+router.get('/logout', (req, res) => {
+  // 쿠키를 지워버리면된다!
+  res.cookie('access_token', '');
+  return res.json({
+    status: 200,
+    data: [],
+    msg: '로그아웃 성공',
+  });
+});
 
 module.exports = router;
