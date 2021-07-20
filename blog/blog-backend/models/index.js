@@ -29,5 +29,19 @@ db.Post = require('./post')(sequelize, Sequelize);
 db.Hashtag = require('./hashtag')(sequelize, Sequelize);
 db.User = require('./user')(sequelize, Sequelize);
 
+// 관계 설정해주기
+// 유저는 많은 포스트를 가질 수 있다. 1:N
+db.User.hasMany(db.Post);
+// 포스트는 유저에 속해있다
+db.Post.belongsTo(db.User);
+// 포스트는 많은 해시태그에 속해 있다.
+db.Post.belongsToMany(db.Hashtag, {
+  through: 'PostHashTag',
+});
+// 해시태그는 많은 포스트에 속해 있다
+db.Hashtag.belongsToMany(db.Post, {
+  through: 'PostHashTag',
+});
+
 // 모듈 내보내기
-module.exports = db;
+db.Post.module.exports = db;
