@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 // 미리 정의해둔 색상
 import palette from '../../lib/styles/palette';
 
@@ -18,6 +18,24 @@ const StyledButton = styled.button`
   &:hover {
     background: ${palette.gray[6]};
   }
+
+  /* props를 받아와서 여러 theme 사용하기 */
+  ${(props) =>
+    props.fullWidth &&
+    css`
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+      width: 100%;
+      font-size: 1.125rem;
+    `}
+  ${(props) =>
+    props.cyan &&
+    css`
+      background-color: ${palette.cyan[5]};
+      &:hover {
+        background-color: ${palette.cyan[4]};
+      }
+    `}
 `;
 
 // 자동 완성 기능을 사용하기 위해서 Button 컴포넌트를 만들어서 내보내주기
