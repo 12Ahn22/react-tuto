@@ -12,11 +12,13 @@ const jwt = require('jsonwebtoken');
 const jwtMiddleWare = require('../../jwtMiddleware');
 
 // 회원 가입 라우터
-router.post('/regist', async (req, res) => {
+router.post('/register', async (req, res) => {
   // 회원 가입을 위한 데이터를 req에서 가져오기
   const { username, password } = req.body;
   // username이 이미 존재하는 지 확인하기
   try {
+    // 에러 테스트
+    // throw error;
     const exists = await User.findOne({
       where: {
         username,

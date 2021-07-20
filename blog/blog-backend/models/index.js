@@ -44,4 +44,4 @@ db.Hashtag.belongsToMany(db.Post, {
 });
 
 // 모듈 내보내기
-db.Post.module.exports = db;
+module.exports = db;

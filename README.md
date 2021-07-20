@@ -140,3 +140,4 @@ const 미들웨어 = (store) => (next) => (action) => {
 - react-router-dom
 - styled-components
 - redux / react-redux / redux-devtools-extension
+- axios

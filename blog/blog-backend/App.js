@@ -10,6 +10,8 @@ const { sequelize } = require('./models/index');
 const jwtMiddleWare = require('./routers/jwtMiddleware');
 // 쿠키 파서
 const cookieParser = require('cookie-parser');
+// cors
+const cors = require('cors');
 // 변수
 const port = process.env.PORT || 4005;
 
@@ -17,6 +19,7 @@ const port = process.env.PORT || 4005;
 const app = express();
 
 // 필수 사용 미들웨어
+app.use(cors()); // cors
 app.use(express.urlencoded({ extended: false })); // url 해석 기능 추가
 app.use(express.json()); // json 해석 기능 추가
 app.use(express.static(path.join(__dirname, 'public')));

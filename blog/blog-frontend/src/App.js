@@ -8,10 +8,14 @@ import WritePage from './pages/WritePage';
 import PostPage from './pages/PostPage';
 import { Route } from 'react-router-dom';
 
+// test 컴포넌트
+import LoginForm from './containers/auth/LoginForm';
+
 function App() {
   return (
     <>
       {/* path에 배열을 추가해, 여러 경로를 한방에 작성 가능 */}
+      <Route component={LoginForm} path={'/test'} />
       <Route component={PostListPage} path={['/@:username', '/']} exact />
       <Route component={LoginPage} path={'/login'} />
       <Route component={RegisterPage} path={'/register'} />
