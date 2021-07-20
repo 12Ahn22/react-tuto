@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser()); // 쿠키를 사용하려면 꼭 쿠키 파서 미들웨어를 사용하자.
 
 // 인증 미들웨어는 라우터보다 먼저 사용하기
-app.use(jwtMiddleWare);
+app.use(jwtMiddleWare); // 토큰을 계속 검증하는 라우터
 
 // 데이터베이스 연결하기
 sequelize

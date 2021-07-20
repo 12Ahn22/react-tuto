@@ -1,0 +1,13 @@
+import React from 'react';
+// 컴포넌트 참조
+import Button from '../components/common/Button';
+
+const PostListPage = () => {
+  return (
+    <div>
+      <Button>버튼</Button>
+    </div>
+  );
+};
+
+export default PostListPage;

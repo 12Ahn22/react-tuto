@@ -134,3 +134,8 @@ const 미들웨어 = (store) => (next) => (action) => {
 - mysql
 - bcrypt
 - jsonwebtoken
+
+**프론트엔드**
+
+- react-router-dom
+- styled-components

@@ -117,7 +117,7 @@ router.get('/', async (req, res) => {
 });
 
 // post를 작성하는 라우터
-router.post('/', async (req, res) => {
+router.post('/', checkLoggedIn, async (req, res) => {
   // 비구조화 할당 - 저장할 데이터
   const { title, body, tags } = req.body; // req.body.속성명
 
