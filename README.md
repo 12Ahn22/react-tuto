@@ -134,6 +134,7 @@ const 미들웨어 = (store) => (next) => (action) => {
 - mysql
 - bcrypt
 - jsonwebtoken
+- cors
 
 **프론트엔드**
 
