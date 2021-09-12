@@ -208,3 +208,15 @@ const 미들웨어 = (store) => (next) => (action) => {
   - 현재 페이지 정보를 가지고 있다.
 - `history`
   - 브라우저의 history 객체와 비슷하다. stack에 지금까지 이동한 url 경로들이 들어있다.
+
+### 🔮 crud
+
+> jsonplaceholder를 사용해서 간단한 crud 만들어보기
+
+> 리액트 연습
+
+![완성 gif 이미지]('readmeData/crud20210912_210651.gif')
+
+- `filter`를 사용해 검색기능
+- `fetch API` 사용해보기
+- `정규표현식` 사용하기
