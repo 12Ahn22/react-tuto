@@ -215,7 +215,7 @@ const 미들웨어 = (store) => (next) => (action) => {
 
 > 리액트 연습
 
-![완성 gif 이미지]('readmeData/crud20210912_210651.gif')
+![완성 gif 이미지](readmeData/crud20210912_210651.gif)
 
 - `filter`를 사용해 검색기능
 - `fetch API` 사용해보기
