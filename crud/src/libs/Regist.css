@@ -1,0 +1,18 @@
+.regist {
+  max-width: 500px;
+  margin: 0 auto;
+}
+.regist .regist__input-box {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.regist .regist__input-box label {
+  margin-right: 1rem;
+  width: 80px;
+  text-align: start;
+}
+.regist .regist__input-box input {
+  flex: 1;
+}
