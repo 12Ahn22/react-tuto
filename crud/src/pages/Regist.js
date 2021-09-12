@@ -41,8 +41,8 @@ const Regist = () => {
   return (
     <>
       <h2>회원가입</h2>
-      <form className='regist'>
-        <div className='regist__input-box'>
+      <form className='form'>
+        <div className='form__input-box'>
           <label htmlFor='name'>name</label>
           <input
             placeholder='name'
@@ -51,7 +51,7 @@ const Regist = () => {
             value={user.name}
           />
         </div>
-        <div className='regist__input-box'>
+        <div className='form__input-box'>
           <label htmlFor='username'>username</label>
           <input
             placeholder='username'
